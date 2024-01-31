@@ -3,7 +3,7 @@ title: n8nを使ったお問い合わせ受付フローの作成（パート2）
 author: yuzo
 slug: contact-form-followup-workflow-with-n8n
 publishDate: 2023-10-31
-postStatus: draft
+postStatus: publish
 description: |-
   Webサイトのお問い合わせのフォローアップとして、お問い合わせ内容をチケット管理システムに登録し、加えて顧客管理システムに顧客登録するワークフローを作成します。
 category: R&D

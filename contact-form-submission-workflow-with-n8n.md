@@ -2,7 +2,7 @@
 title: n8nを使ったお問い合わせ受付フローの作成（パート1）
 author: yuzo
 slug: contact-form-submission-workflow-with-n8n
-publishDate: 2024-02-01
+publishDate: 2024-02-01 00:00:00
 postStatus: publish
 description: Webサイトのお問い合わせフォームから送信されたお問い合わせ内容をDBに保存し、チャットに通知するワークフローを作成します。
 category: R&D

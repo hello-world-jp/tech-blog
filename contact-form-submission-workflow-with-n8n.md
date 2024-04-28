@@ -35,7 +35,7 @@ flowchart LR
 
 今回のシステム構成は下図のようになります。ユーザーはCloudflareに配置したWebフォームからお問い合わせを行います。お問い合わせ内容はHetzner Cloudに配置したn8nに送信され、n8nで作成したワークフローが実行されます。管理者はMattermostから通知を受け取りお問い合わせ内容を確認します。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/system_structure.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/system_structure.png"/></figure>
 
 
 | Resource | Usage | Hosting Type | Licensing Model |
@@ -110,23 +110,23 @@ NocodbはNocodb自体が使用するデフォルトのDB以外に、外部のDB�
 
 まず、テーブルを作成したいBase（複数のテーブルをまとめる領域）を選択してデータソースの追加ボタンをクリックします。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_datasource.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_datasource.png"/></figure>
 
 フォームに追加したいデータソースの接続情報を入力して疎通確認を行い接続情報を保存します[^1]。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_datasource-input.png" style="width:100%;max-width:600px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_datasource-input.png" class="md:max-w-xl"/></figure>
 
 データソースが追加されると下記イメージのようになります。なお、一つのBaseに追加できるデータソースは一つのみとなっています。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_datasource-added.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_datasource-added.png"/></figure>
 
 次に、追加したデータソースにテーブルを作成します。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_table.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/create_table-new_table.png"/></figure>
 
 作成したテーブルにお問い合わせデータの項目を定義したらテーブルの作成は完了です。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/create_table-add_fields.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/create_table-add_fields.png"/></figure>
 
 作成したテーブルは以下のようになります。
 
@@ -158,7 +158,7 @@ Triggers:
 n8nでNocodbで作成したテーブルにお問い合わせ内容を自動登録すワークフローを作成します。
 ワークフローを起動するトリガーはCloudflareからPOSTされるお問い合わせ内容の受信となるため最初にWebhookノードを追加します（ノードパネルから`On webhook call`を選択）。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_webhook_node.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_webhook_node.png"/></figure>
 
 ノードを追加して設定パネルで以下のように設定します。
 
@@ -176,7 +176,7 @@ n8nでNocodbで作成したテーブルにお問い合わせ内容を自動登�
 
 次にお問い合わせ情報に識別用のお問い合わせ番号を割り当てるためにCodeノードを追加します（ノードパネルの`Data transformation`から選択）。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_code_node.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_code_node.png"/></figure>
 
 ノードを追加して設定パネルのコード入力欄に以下のJavaScriptを入力します。
 `$input`は現在のノードに対する入力を表す変数で、今回の場合は一つ前のWebhookノードからの出力を参照しています（参考：[Current node input](https://docs.n8n.io/code/builtin/current-node-input/)）。
@@ -218,7 +218,7 @@ Webhookから出力されるデータは下記のようなJSONデータとなっ
 次にお問い合わせ内容をNocoDBに登録します。
 NocoDBと連携するためのノードはn8nに標準で用意されているためそれを利用します（ノードパネルの`Action in an app`から選択）。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_nocodb_node.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_nocodb_node.png"/></figure>
 
 ノードを追加して設定パネルで以下のように設定します。
 
@@ -246,7 +246,7 @@ Fields to Send（NocoDBに送信するフィールド） の項目には以下�
 | message | &#123;&#123; $json.message &#125;&#125; |
 | contact_no | &#123;&#123; $json.contactNo &#125;&#125; |
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_nocodb_node-fields.png" style="width:100%;max-width:300px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_nocodb_node-fields.png" class="md:max-w-xs"/></figure>
 
 
 ### お問い合わせ内容のメッセージ通知
@@ -255,7 +255,7 @@ Fields to Send（NocoDBに送信するフィールド） の項目には以下�
 今回はMattermostというSlackとよく似たWebアプリケーションを通知先にします。
 Mattermostと連携するためのノードはn8nに標準で用意されているためそれを利用します（ノードパネルの`Action in an app`から選択）。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_mattermost_node.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_mattermost_node.png"/></figure>
 
 ノードを追加して設定パネルで以下のように設定します。
 
@@ -282,28 +282,28 @@ The following message was sent from the contact form.
 今回はBotアカウントがメッセージを投稿するようにしたいので、アクセストークンはBotアカウントのものを作成します。
 アクセストークンは`Integrations`から`Bot Accounts`を選択し`Create New Token`で作成することができます。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_mattermost_node-token.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_mattermost_node-token.png"/></figure>
 
 なお、ボットアカウントがチャネルに投稿できるように`post:channels`の権限を付与する必要があります。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_mattermost_node-permission.png" style="width:100%;max-width:500px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-create_mattermost_node-permission.png" class="md:max-w-lg"/></figure>
 
 ## 動作確認
 
 ワークフローをアクティブにしてCloudflare Pagesにデプロイしたお問い合わせフォームからお問い合わせを送信してみます。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-input_form.png" style="width:100%;max-width:500px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-input_form.png" class="md:max-w-lg"/></figure>
 
 n8nにアクセスするとワークフローが実行されていることが確認できます。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-workflow_execution.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-workflow_execution.png"/></figure>
 
 NocoDBにアクセスするとお問い合わせ内容が登録されていることが確認できます。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-nocodb.png" style="width:100%;max-width:800px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-nocodb.png"/></figure>
 
 MattermostにアクセスするとBotアカウントからお問い合わせ内容が投稿されていることが確認できます。
 
-<img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-mattermost.png" style="width:100%;max-width:500px"/>
+<figure><img src="./images/contact-form-submission-workflow-with-n8n/workflow-run-mattermost.png" sclass="md:max-w-lg"/></figure>
 
 [^1]: 外部DBとバックエンドサービスは同一のブリッジ・ネットワーク内にあるため、ホストアドレスはサービス名を指定しています

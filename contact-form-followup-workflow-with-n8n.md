@@ -3,6 +3,7 @@ title: n8nを使ったお問い合わせ受付フローの作成（パート2）
 author: yuzo
 slug: contact-form-followup-workflow-with-n8n
 publishDate: 2024-02-01 00:00:01
+updateDate: 2024-05-02 00:00:00
 postStatus: publish
 description: |-
   Webサイトのお問い合わせのフォローアップとして、お問い合わせ内容をチケット管理システムに登録し、加えて顧客管理システムに顧客登録するワークフローを作成します。
@@ -478,6 +479,9 @@ return [
   "exp": {{ $json.exp }}
 }
 ```
+
+>[!NOTE]
+>n8バージョン1.37.0でJWTノードが標準搭載されるようになったため上記コミュニティノードのインストールは不要です。
 
 JWTの用意ができましたので`GraphQL`ノードを追加してユーザー照会を行います（ノードパネルの`Action in an app`から選択）。
 

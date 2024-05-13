@@ -87,8 +87,6 @@ app.use('*', async (c, next) => {
   }).call(null, c, next)
 })
 
-app.use('*', )
-
 app.get('/:id{[0-9]+}', (c) => {
   const { id } = c.req.param()
   switch (id) {

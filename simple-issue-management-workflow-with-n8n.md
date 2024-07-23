@@ -651,7 +651,7 @@ return { open, noAssignee }
 
 | Name | Value |
 | - | - |
-| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのホストアドレスを設定 |
+| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのURLを設定 |
 | Resource | Message |
 | Operation | Post |
 | Channel Name or ID | 投稿したいチャネルのIDを設定 |

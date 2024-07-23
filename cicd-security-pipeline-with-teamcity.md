@@ -735,9 +735,9 @@ PDFをREST API経由で作成するために`HTTP Request`ノードを追加し�
 ```json
 {
   "channel_id": "投稿したいチャネルのID",
-  "message": "### Daily Security Report\n\n|findings|count|\n|:---|---:|\n|critical|&#123;&#123; $('severity集計ノードの名前').first().json.severity_count.critical &#125;&#125;|\n|high|&#123;&#123; $('severity集計ノードの名前').first().json.severity_count.high &#125;&#125;|\n|medium|&#123;&#123; $('severity集計ノードの名前').first().json.severity_count.medium &#125;&#125;|\n|low|&#123;&#123; $('severity集計ノードの名前').first().json.severity_count.low &#125;&#125;|\n|info|&#123;&#123; $('severity集計ノードの名前').first().json.severity_count.info &#125;&#125;|\n\nPlease check the attachment for more details.",
+  "message": "### Daily Security Report\n\n|findings|count|\n|:---|---:|\n|critical|{{ $('severity集計ノードの名前').first().json.severity_count.critical }}|\n|high|{{ $('severity集計ノードの名前').first().json.severity_count.high }}|\n|medium|{{ $('severity集計ノードの名前').first().json.severity_count.medium }}|\n|low|{{ $('severity集計ノードの名前').first().json.severity_count.low }}|\n|info|{{ $('severity集計ノードの名前').first().json.severity_count.info }}|\n\nPlease check the attachment for more details.",
   "file_ids": [
-    "&#123;&#123; $json.file_infos[0].id &#125;&#125;"
+    "{{ $json.file_infos[0].id }}"
   ]
 }
 ```

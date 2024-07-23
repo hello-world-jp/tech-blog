@@ -224,7 +224,7 @@ NocoDBと連携するためのノードはn8nに標準で用意されている�
 
 | Name | Value |
 | - | - |
-| Credential to connect with | NocoDBで発行したAPIトークンとNocodbのホストアドレス（`http://(NocoDBのサービス名):8080`）を設定 |
+| Credential to connect with | NocoDBで発行したAPIトークンとNocodbのUURL（`http://(NocoDBのサービス名):8080`）を設定 |
 | Resource | Row |
 | Operation | Create |
 | Workspace Name or ID | リストの中から選択（NocoDBからAPI経由で自動取得） |
@@ -261,7 +261,7 @@ Mattermostと連携するためのノードはn8nに標準で用意されてい�
 
 | Name | Value |
 | - | - |
-| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのホストアドレス（`http://(Mattermostのサービス名):8065/`）を設定 |
+| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのURL（`http://(Mattermostのサービス名):8065/`）を設定 |
 | Resource | Message |
 | Operation | Post |
 | Channel Name or ID | 投稿したいチャネルのIDを設定 |

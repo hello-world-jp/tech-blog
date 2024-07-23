@@ -46,7 +46,6 @@ flowchart LR
 | [n8n](https://docs.n8n.io/) | ワークフローを実行する | Self Hosting（Docker container on Hetzner Cloud） | Freemium<br />Open Source |
 | [Dependency-Track](https://docs.dependencytrack.org/) | アプリケーションのリスク評価を行う | Self Hosting（Docker container on Hetzner Cloud） | Free<br />Open Source |
 | [QuickChart](https://quickchart.io/documentation/) | グラフ画像を生成する | Self Hosting（Docker container on Hetzner Cloud） | Freemium<br />Open Source |
-| [PostgreSQL](https://www.postgresql.org/docs/) | Issueの保存および各バックエンドサービスのデータストアとして使用する | Self Hosting（Docker container on Hetzner Cloud） | Free<br />Open Source |
 
 
 ## フローの作成
@@ -67,13 +66,13 @@ SBOMの作成には[CycloneDX Generator (cdxgen)](https://cyclonedx.github.io/cd
 
 ```shell
 # Retrieve DEB packages, APT sources, RPM packages, ...
-cdxgen -t os --server-url "Dependency-TrackのURL" --api-key "Dependency-Trackで発行したAPIキー" --project-id "Dependency-Trackで作成した親プロジェクトのID"
+cdxgen -t os --server-url "Dependency-Track APIサーバのURL" --api-key "Dependency-Trackで発行したAPIキー" --project-id "Dependency-Trackで作成した親プロジェクトのID"
 
 # Parse composer.lock
-cdxgen -t php "プロジェクトのルートディレクトリ" --server-url "Dependency-TrackのURL" --api-key "Dependency-Trackで発行したAPIキー" --project-id "Dependency-Trackで作成した子プロジェクトのID"
+cdxgen -t php "プロジェクトのルートディレクトリ" --server-url "Dependency-Track APIサーバのURL" --api-key "Dependency-Trackで発行したAPIキー" --project-id "Dependency-Trackで作成した子プロジェクトのID"
 
 # Parse package-lock.json
-cdxgen -t javascript "プロジェクトのルートディレクトリ" --server-url "Dependency-TrackのURL" --api-key "Dependency-Trackで発行したAPIキー" --project-id "Dependency-Trackで作成した子プロジェクトのID"
+cdxgen -t javascript "プロジェクトのルートディレクトリ" --server-url "Dependency-Track APIサーバのURL" --api-key "Dependency-Trackで発行したAPIキー" --project-id "Dependency-Trackで作成した子プロジェクトのID"
 ```
 
 コンポーネントの登録が完了するとリスク評価が行われ下図のように一覧が表示されます。
@@ -249,7 +248,7 @@ return [vulnerabilities, violations]
 | Property Name | hash |
 | Encoding | HEX |
 
-次にグラフ画像のバイナリデータをファイル出力ノード（`Read/Write Files from Disk`）を使ってローカルディスクにファイル出力します（ファイル出力ノードに渡すinputデータにバイナリデータを追加する必要があるため先に`Code`ノードで加工を行います）。
+次にグラフ画像のバイナリデータをファイル書き込みノード（`Read/Write Files from Disk`）を使ってローカルディスクにファイルを出力します（ファイル書き込みノードに渡すinputデータにバイナリデータを追加する必要があるため先に`Code`ノードで加工を行います）。
 
 <figure><img src="./images/application-risk-assessment-workflow-with-n8n/workflow-write_image.png"/></figure>
 
@@ -260,7 +259,7 @@ items[0].binary = $('グラフ画像生成ノードの名前').first().binary
 return items
 ```
 
-ファイル出力ノードの設定パネルで以下のように設定します。
+ファイル書き込みノードの設定パネルで以下のように設定します。
 
 | Name | Value |
 | - | - |
@@ -276,7 +275,7 @@ return items
 
 <figure><img src="./images/application-risk-assessment-workflow-with-n8n/workflow-create_short_summary.png"/></figure>
 
-ファイル出力ノードの後に`Code`ノードを追加して設定パネルのコード入力欄に以下のJavaScriptを入力し、画像ファイルを参照するためのURLを組み立てます。
+ファイル書き込みノードの後に`Code`ノードを追加して設定パネルのコード入力欄に以下のJavaScriptを入力し、画像ファイルを参照するためのURLを組み立てます。
 
 ```javascript
 return {
@@ -326,7 +325,7 @@ return {
 
 | Name | Value |
 | - | - |
-| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのホストアドレスを設定 |
+| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのURLを設定 |
 | Resource | Message |
 | Operation | Post |
 | Channel Name or ID | 投稿したいチャネルのIDを設定 |

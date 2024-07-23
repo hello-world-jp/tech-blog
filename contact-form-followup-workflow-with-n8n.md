@@ -286,7 +286,7 @@ n8nには今回使用するチケット管理システム（`Zammad`）からユ
 
 | Name | Value |
 | - | - |
-| Credential to connect with | Zammadで発行したアクセストークンとZammadのホストアドレス（`http://(Zammadのサービス名):3000/`）を設定 |
+| Credential to connect with | Zammadで発行したアクセストークンとZammadのURL（`http://(Zammadのサービス名):3000/`）を設定 |
 | Resource | User |
 | Operation  | Get Many |
 | Return All  | ON |

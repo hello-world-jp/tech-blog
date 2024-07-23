@@ -432,7 +432,7 @@ trueブランチに`Mattermost`ノード（ノードパネルの`Action in an ap
 
 | Name | Value |
 | - | - |
-| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのホストアドレス（`http://(Mattermostのサービス名):8065/`）を設定 |
+| Credential to connect with | Mattermostで発行したアクセストークンとMattermostのURL（`http://(Mattermostのサービス名):8065/`）を設定 |
 | Resource | Message |
 | Operation | Post |
 | Channel Name or ID | 投稿したいチャネルのIDを設定 |

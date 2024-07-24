@@ -2,7 +2,7 @@
 title: TeamCityを使ったCI/CDパイプラインによるアプリケーションのセキュリティ強化
 author: yuzo
 slug: cicd-security-pipeline-with-teamcity
-publishDate: 2024-07-20 00:00:00
+publishDate: 2024-07-23 00:00:00
 postStatus: publish
 description: 標準的なセキュリティ対策を組み込みこんだCI/CDパイプラインをTeamCityで作成します。
 category: R&D
@@ -156,6 +156,9 @@ if lastBuild["count"] > 0:
 
 最終行でプリント出力している`##teamcity[setParameter name='パラメーター名' value='パラメーター値']`は[サービスメッセージ](https://www.jetbrains.com/help/teamcity/service-messages.html#set-parameter)です。後続のステップで使用するビルドパラメーターを追加したり更新することができます。ここでは取得したコミットハッシュ値をビルドパラメーターに追加しています。
 
+>[!NOTE]
+>サービスメッセージでビルドパラメーターを追加すると、ビルドのコンフィギュレーションで同名のコンフィギュレーションパラメーターが追加されます。値を設定しないとビルドが有効になりません。デフォルト値を設定してください（今回の場合は空文字）。
+
 ##### ソースコードのスキャンを行いシークレット情報を検出
 
 `ggshield`を使ってソースコードにシークレット情報がハードコーディングされていないかどうかチェックを行います。
@@ -163,7 +166,7 @@ if lastBuild["count"] > 0:
 
 ```shell
 #!/bin/bash
-if [ %demo.lastCommit% -ne "" ]; then
+if [ -n "%demo.lastCommit%" ]; then
 	ggshield secret scan commit-range %demo.lastCommit%...HEAD --json > ggshield_results.json
 else
 	ggshield secret scan repo ./ --json > ggshield_results.json
@@ -237,7 +240,7 @@ if __name__ == "__main__":
 
 ```shell
 #!/bin/bash
-if [ %demo.lastCommit% -ne "" ]; then
+if [ -n "%demo.lastCommit%" ]; then
   export SEMGREP_BASELINE_REF=%demo.lastCommit%
 fi
 semgrep scan --json -o semgrep_report.json
@@ -399,7 +402,7 @@ object PipelineDemo : BuildType({
     name = "Pipeline Demo"
 
     params {
-        param("demo.lastCommit", "HEAD~1")
+        param("demo.lastCommit", "")
     }
 
     vcs {
@@ -437,7 +440,7 @@ object PipelineDemo : BuildType({
             id = "detect_secret"
             scriptContent = """
                 #!/bin/bash
-                if [ %demo.lastCommit% -ne "" ]; then
+                if [ -n "%demo.lastCommit%" ]; then
                 	ggshield secret scan commit-range %demo.lastCommit%...HEAD --json > ggshield_results.json
                 else
                 	ggshield secret scan repo ./ --json > ggshield_results.json
@@ -451,7 +454,7 @@ object PipelineDemo : BuildType({
             id = "find_vulnerabilities"
             scriptContent = """
                 #!/bin/bash
-                if [ %demo.lastCommit% -ne "" ]; then
+                if [ -n "%demo.lastCommit%" ]; then
                   export SEMGREP_BASELINE_REF=%demo.lastCommit%
                 fi
                 semgrep scan --json -o semgrep_report.json

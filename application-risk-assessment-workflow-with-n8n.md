@@ -121,7 +121,7 @@ APIを実行すると以下のような形でリスク評価結果のサマリ�
 [
   {
     "name": "demo-app-php",
-    ・・・
+    ~~~
     "metrics": {
       "critical": 1,
       "high": 6,
@@ -140,7 +140,7 @@ APIを実行すると以下のような形でリスク評価結果のサマリ�
       "policyViolationsWarn": 0,
       "policyViolationsInfo": 130,
       "policyViolationsTotal": 130,
-      ・・・
+      ~~~
     }
   }
 ]

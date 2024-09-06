@@ -7,6 +7,7 @@ postStatus: publish
 description: 標準的なセキュリティ対策を組み込みこんだCI/CDパイプラインをTeamCityで作成します。
 category: R&D
 tags:
+  - Security
   - CI/CD
   - No/Low Code
 techStacks:
@@ -565,7 +566,7 @@ APIを実行すると以下のような形で脆弱性情報の一覧を取得�
 [
   {
     "report_name": "Product Report: demo-app",
-    ・・・
+    ~~~
     "findings": [
         {
             "id": 1,
@@ -574,14 +575,14 @@ APIを実行すると以下のような形で脆弱性情報の一覧を取得�
             "cvssv3_score": 9.8,
             "severity": "Critical",
             "description": "You are using a component with a known vulnerability. Version 5.36.0-7+deb12u1 of the perl component is affected by the vulnerability with an id of CVE-2023-47100...."
-            ・・・
+            ~~~
         },
         {
             "id": 2,
-            ・・・
+            ~~~
         }
     ],
-    ・・・
+    ~~~
   }
 ]
 ```

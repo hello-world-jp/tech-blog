@@ -17,6 +17,8 @@ techStacks:
   - Wazuh
 ---
 
+本記事ではファイル改竄やマルウェア感染、不正アクセスなどWebアプリケーションに対する様々な脅威を検知し管理する仕組みをWazuhで構築します。
+
 ## TOC
 
 ## システム概要
@@ -33,7 +35,7 @@ techStacks:
 ## システム構成
 
 今回のシステム構成は下図のようになります。
-WebサーバーおよびアプリケーションサーバーにXDRエージェントをインストールし脅威を検知します。
+WebサーバーおよびアプリケーションサーバーにWazuhエージェントをインストールし脅威を検知します。
 エージェントは検知した脅威情報を管理サーバーに送信し、管理サーバーはワークフローエンジンを介してインシデント管理ツールおよびチャットツールに脅威情報を送信します。
 
 <figure><img src="./images/xdr-and-siem-with-wazuh/system_structure.png"/></figure>
@@ -65,12 +67,12 @@ Wazuhの設定は`ossec.conf`で行います。
 <!-- File integrity monitoring -->
 <syscheck>
 
-  ~~~
+  [...]
 
   <!-- Frequency that syscheck is executed default every 12 hours -->
   <frequency>43200</frequency>
 
-  ~~~
+  [...]
  
   <!-- Directories to check  (perform all possible verifications) -->
   <directories>/etc,/usr/bin,/usr/sbin</directories>
@@ -100,7 +102,7 @@ Wazuhの設定は`ossec.conf`で行います。
   <!-- File types to ignore -->
   <ignore type="sregex">.log$|.swp$</ignore>
 
-  ~~~
+  [...]
 
 </syscheck>
 ```
@@ -240,7 +242,7 @@ Wazuhサーバーの`/var/ossec/etc/ossec.conf`に以下の内容を追加しま
 ```xml
 <ossec_config>
 
-  ~~~
+  [...]
 
   <command>
     <name>yara_linux</name>
@@ -259,7 +261,7 @@ Wazuhサーバーの`/var/ossec/etc/ossec.conf`に以下の内容を追加しま
     <rules_id>100200,100201</rules_id>
   </active-response>
 
-  ~~~
+  [...]
 
 </ossec_config>
 ```
@@ -272,7 +274,7 @@ YARAスキャンの結果は`/var/ossec/logs/active-responses.log`に`wazuh-yara
 ```xml
 <ossec_config>
 
-  ~~~
+  [...]
 
   <!-- 下記ファイルをログ収集対象に追加 -->
   <localfile>
@@ -280,7 +282,7 @@ YARAスキャンの結果は`/var/ossec/logs/active-responses.log`に`wazuh-yara
     <location>/var/ossec/logs/active-responses.log</location>
   </localfile>
 
-  ~~~
+  [...]
 
 </ossec_config>
 ```
@@ -368,14 +370,14 @@ rule-files:
 ```xml
 <ossec_config>
 
-  ~~~
+  [...]
 
   <localfile>
     <log_format>json</log_format>
     <location>/var/log/suricata/eve.json</location>
   </localfile>
 
-  ~~~
+  [...]
 
 </ossec_config>
 ```
@@ -383,7 +385,7 @@ rule-files:
 次に`/etc/suricata/rules/`ディレクトリ直下にルールファイルを追加して以下のオリジナルルールを追加し、エンドポイントから外部のネットワークに対して60秒間に30回を超えるアウトバウンドトラフィックを検知した場合にアラートを出すようにします。
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"Possible Malicious Outbound Activity"; flow:to_server; flags: S,12; threshold: type both, track by_src, count 30, seconds 60; classtype:misc-activity; sid:8600001; rev:1; metadata: severity high;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"Possible Malicious Outbound Activity"; flow:to_server; flags: S,12; threshold: type both, track by_src, count 30, seconds 60; classtype:misc-activity; sid:1000001; rev:1; metadata: severity high;)
 ```
 
 #### Wazuhサーバーの設定
@@ -437,14 +439,14 @@ eccube.log.formatter.line:
 ```xml
 <ossec_config>
 
-  ~~~
+  [...]
 
   <localfile>
     <log_format>syslog</log_format>
     <location>/var/www/html/var/log/prod/*.log</location>
   </localfile>
 
-  ~~~
+  [...]
 
 </ossec_config>
 ```
@@ -499,15 +501,15 @@ eccube.log.formatter.line:
 ```xml
 <group name="syslog,eccube,">
 
-  ~~~
+  [...]
 
   <rule id="100401" level="5">
-    ~~~
+    [...]
     <options>no_log</options>
   </rule>
 
   <rule id="100402" level="3">
-    ~~~
+    [...]
     <options>no_log</options>
   </rule>
 
@@ -594,7 +596,7 @@ exit 0;
 ```xml
 <ossec_config>
 
-  ~~~
+  [...]
 
   <command>
     <name>ip_block</name>
@@ -613,7 +615,7 @@ exit 0;
     <rules_id>100403</rules_id>
   </active-response>
 
-  ~~~
+  [...]
 
 </ossec_config>
 ```
@@ -727,7 +729,7 @@ if __name__ == "__main__":
 ```xml
 <ossec_config>
 
-  ~~~
+  [...]
 
   <integration>
     <name>custom-n8n</name>
@@ -740,7 +742,7 @@ if __name__ == "__main__":
     <group>malware,ids,attack,attacks,</group>
   </integration> 
 
-  ~~~
+  [...]
 
 </ossec_config>
 ```
